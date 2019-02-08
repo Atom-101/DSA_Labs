@@ -23,12 +23,11 @@ void generateFreeList()
             break;
         }
     }
-
-    free_list = (++i); memory[i+1] = _NULL;
+    free_list = 50*3-3; memory[50*3-2] = _NULL;
     
-    for(i=i+3;i<50*3;i+=3)
+    for(int j=50*3-6;j>=i;j-=3)
     {
-        push(i);
+        push(j);
     }
 }
 

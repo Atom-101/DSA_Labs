@@ -2,7 +2,8 @@
 
 #include "MemArray.h"
 #include "MainFunctions.h"
-
+//MainFunctions.c has declarations for all 8 functions to be used 
+//in main
 int main()
 {
     int option; initializeMemArray();
@@ -15,6 +16,9 @@ int main()
         "6. Display all list\n7. Display free list\n"
         "8. Perform defragmentation\n9. Press 0 to exit\n\n");
         scanf("%d",&option);
+        //printf("%d",option);
+        char c;
+        while ((c = getchar()) != '\n' && c != EOF);
 
         switch(option){
 

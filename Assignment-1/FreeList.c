@@ -5,6 +5,7 @@
 void push(int i)
 {
     memory[i+1] = free_list;
+    memory[i+2] = _FREE_FLAG;
     free_list = i;
 
 }

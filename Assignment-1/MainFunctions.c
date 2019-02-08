@@ -20,8 +20,11 @@ void createList()
     printf("\nEnter key value to be inserted in the newly created list-%d: ",created_lists);
     scanf("%d",&inp);
 
+    //Head of new created list is current head of free
     lists[created_lists] = free_list;
     
+    //If the last element of free_list is reached, make free_list=-1
+    //else pop it
     if(memory[free_list+1] == _NULL){
         free_list = -1;
     }
@@ -41,7 +44,7 @@ void insertElement()
         return;
     }
 
-
+    
     int id,inp;
     printf("\nList you want to insert in: ");
     scanf("%d",&id);
@@ -50,6 +53,7 @@ void insertElement()
         return;
     }
 
+    //Pop free_list stack
     int free_loc = free_list;
     if(memory[free_list+1] == _NULL){
         free_list = -1;
@@ -62,6 +66,7 @@ void insertElement()
     printf("\nEnter the key value: ");
     scanf("%d",&inp);
     
+    //Insert into empty list
     if(lists[id]==-1){
         lists[id]=free_loc;
         memory[free_loc] = _NULL;
@@ -71,6 +76,7 @@ void insertElement()
         return;
     }
 
+    //Insert as first element of list
     int prev = lists[id];
     int ptr = memory[prev+2];
     if(inp<memory[prev+1]){
@@ -83,6 +89,7 @@ void insertElement()
         return;
     }
 
+    //Insert within list
     while(ptr!=_NULL)
     {
         if(inp<memory[ptr+1]){
@@ -98,6 +105,7 @@ void insertElement()
         ptr = memory[ptr+2];
     }
 
+    //Insert as last elemnet of list
     memory[prev+2] = free_loc;
     memory[free_loc] = prev;
     memory[free_loc+1] = inp;
@@ -112,17 +120,30 @@ void deleteElement()
     printf("\nEnter the key value: ");
     scanf("%d",&inp);
 
+    //Empty list
     if(lists[id] ==-1)
         printf("\nERROR: SELECTED LIST IS EMPTY\n");
 
+    //Check whether list has only 1 element or
+    //if the first element of list is to be deleted
     int ptr=lists[id];
-    if(inp == memory[ptr+1] && memory[ptr+2]==_NULL){
-        lists[id]=-1;
-        push(ptr);
-        printf("\nSUCCESS\n");
-        return;
+    if(inp == memory[ptr+1]){
+        if(memory[ptr+2]==_NULL){
+            lists[id]=-1;
+            push(ptr);
+            printf("\nSUCCESS\n");
+            return;
+        }
+        else{
+            lists[id] = memory[ptr+2];
+            memory[memory[ptr+2]] = _NULL;
+            push(ptr);
+            printf("\nSUCCESS\n");
+            return;
+        }
     }
 
+    //Traverse list to find element in sorted list
     while(ptr!=_NULL && inp>=memory[ptr+1])
     {
         if(inp==memory[ptr+1]){
@@ -140,6 +161,7 @@ void deleteElement()
 }
 void countElements()
 {
+    //Iterate over all generated non empty lists and count their elements
     int count = 0;
     if(created_lists == -1){
         printf("\nERROR: NO LISTS EXIST");
@@ -147,6 +169,7 @@ void countElements()
     }
     for(int i =0;i<5;i++)
     {
+        //List empty or not created
         if(lists[i] ==-1)
             continue;
 
@@ -164,6 +187,7 @@ void countElements()
 }
 void countListElements()
 {
+    //Take a list index as input and count the number of elements in it
     int count =0,id;
     printf("\nEnter the list number: ");
     scanf("%d",&id);
@@ -188,6 +212,7 @@ void displayLists()
         printf("\nERROR: NO LISTS EXIST");
         return;
     }
+    //Iterate over lists and display contents of each list
     for(int i =0;i<5;i++)
     {
         if(lists[i] ==-1)
@@ -215,13 +240,95 @@ void displayFreeList()
     }
     int ptr = free_list;
     printf("[");
-    do{
-        printf("%d,",ptr);
+    while(ptr!=_NULL)
+    {
+        if(memory[ptr+1]!=_NULL)
+            printf("%d,",ptr);
+        else
+            printf("%d",ptr);
         ptr = memory[ptr+1];
-    }while(ptr!=_NULL);
+    }
     printf("]\n");
 }
 void defrag()
 {
+    // for(int i=2;i<50*3;i+=3)
+    // {
+    //     if(memory[i] ==_FREE_FLAG)
+    //     {
+    //         int j = i+3;
+    //         for(;memory[j]==_FREE_FLAG && j<50*3;j+=3);
+    //         if(j>=50*3){
+    //             printf("\nSUCCESS\n");
+    //             generateFreeList();
+    //             return;
+    //         }
+    //         //move
+    //         //copy to new loc
+    //         memory[i-2] = memory[j-2];
+    //         memory[i-1] = memory[j-1];
+    //         memory[i] = memory[j];
+    //         //change addresses
+    //         if(memory[i-2]!=_NULL){
+    //             int prev = memory[i-2];
+    //             memory[prev+2] = i-2;
+    //         }
+    //         if(memory[i]!=_NULL){
+    //             int next = memory[i];
+    //             memory[next] = i-2;
+    //         }
+    //         //reset list head
+    //         if(memory[i-2]==_NULL){
+    //             for(int k=0; k<created_lists;k++){
+    //                 if(lists[k]==j-2){
+    //                     lists[k] = i-2;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         //apply free flag to previous loc
+    //         memory[j] = _FREE_FLAG;
+    //     }
+    // }
+    
+    
+    //Declare a new memory and populate it with
+    //defragmented version of old memory
+    int memory1[50*3];
+    for(int i=0;i<150;i++)
+        memory1[i]= memory[i];
+    for(int i=0;i<150;i++)
+        memory[i] = 0;
+    int free_loc;
+    generateFreeList();
+    displayFreeList();
+    for(int i = 0;i<=created_lists;i++){
+        int ptr = lists[i];
+        if(lists[i]==-1)
+            continue;
+        int top_new;
+        free_loc = free_list;
+        pop();
 
+        memory[free_loc+1] = memory1[ptr+1];
+        memory[free_loc] = _NULL;
+        memory[free_loc+2] = _NULL;
+        lists[i] = free_loc;
+        top_new = free_loc;
+        
+        ptr = memory1[ptr+2];
+
+        while(ptr!=_NULL){
+            free_loc = free_list;
+            pop();
+            memory[top_new+2] = free_loc;
+            memory[free_loc] = top_new;
+            memory[free_loc+1] = memory1[ptr+1];
+            memory[free_loc+2] = _NULL;
+            
+            top_new = free_loc;
+            ptr = memory1[ptr+2];
+        }
+    }
+    printf("\nSUCCESS\n");
 }
