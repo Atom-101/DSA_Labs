@@ -13,7 +13,6 @@ void merge(Element Ls1[],int sz1, Element Ls2[], int sz2, Element Ls[])
 			Ls[k] = Ls2[j];
 			j++;
 		}
-		
 		k++;
 	}
 	
@@ -62,8 +61,8 @@ void iterMergeSort(Element* Ls, int size)
 			int r = i+k;
 			int r_size = i+2*k-1>=size?(size)-(i+k):k;
 			
-			if(i+k>=size)
-				continue;
+			if(r>=size)
+				break;
 			
 			Element* left = malloc(sizeof(Element)*k);
 			Element* right = malloc(sizeof(Element)*r_size);

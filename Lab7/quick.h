@@ -6,7 +6,7 @@
 #include "stack.h"
 
 typedef struct r{
-	char* name;
+	char name[10];
 	long long int empID;
 } Record;
 

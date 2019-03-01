@@ -22,12 +22,16 @@ void iterativeQuickSort(Record arr[],int size, int thresh)
 		int p = partition(arr,low,high);
 		
 		// For elements before pivot
-		push(s,low);
-		push(s,p-1);
+		if(p-1>low){
+			push(s,low);
+			push(s,p-1);
+		}
 		
 		// For elements after pivot
-		push(s,p+1);
-		push(s,high);
+		if(p+1<high){	
+			push(s,p+1);
+			push(s,high);
+		}
 	}
 }
 
